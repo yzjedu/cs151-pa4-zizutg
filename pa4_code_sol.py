@@ -43,9 +43,7 @@ def write_headlines_with_word(headlines, word, output_file):
 # Parameters: headlines (list of strings)
 # Returns: The average length as a float.
 def calculate_average_length(headlines):
-    total_characters = 0
-    for headline in headlines:
-        total_characters += len(headline)
+    total_characters = sum(len(headline) for headline in headlines)
     return total_characters / len(headlines)
 
 # Purpose: Find the longest headline by character count.
@@ -68,26 +66,6 @@ def find_shortest_headline(headlines):
             shortest = headline
     return shortest
 
-
-# Purpose: Display menu options and get a valid menu option from the user.
-# Parameters: None
-# Returns: A valid menu option as an integer (1 to 7).
-def get_menu_option():
-    print("Menu Options:")
-    print("\t1. Count headlines containing a specific word.")
-    print("\t2. Write headlines with a specific word to a new file.")
-    print("\t3. Calculate average headline length.")
-    print("\t4. Find the longest headlines.")
-    print("\t5. Find the shortest headlines.")
-    print("\t6. Load a new file.")
-    print("\t7. Quit.")
-    
-    option = input("Enter your choice (1-7): ").strip()
-    while not option.isdigit() or not (1 <= int(option) <= 7):
-        print("Invalid input. Please enter a number between 1 and 7.")
-        option = input("Enter your choice (1-7): ").strip()
-    return int(option)
-
 # Purpose: Main function to drive the program.
 # Parameters: None
 # Returns: None
@@ -98,39 +76,46 @@ def main():
     headlines = []
     choice = 'yes'
     while choice != 'no':
-        
         if not headlines:
             filename = read_filename()
             headlines = read_headlines(filename)
             print(f"File '{filename}' loaded successfully with {len(headlines)} headlines.\n")
 
-        choice = get_menu_option()
-        print()
+        print("Menu Options:")
+        print("\t1. Count headlines containing a specific word.")
+        print("\t2. Write headlines with a specific word to a new file.")
+        print("\t3. Calculate average headline length.")
+        print("\t4. Find the longest headlines.")
+        print("\t5. Find the shortest headlines.")
+        print("\t6. Load a new file.")
+        print("\t7. Quit.")
 
-        if choice == 1:
+        choice = input("Enter your choice: ").strip()
+        if choice == '1':
             word = input("Enter the word to search for: ").strip()
             count = count_word_occurrences(headlines, word)
             print(f"The word '{word}' appears in {count} headlines.\n")
-        elif choice == 2:
+        elif choice == '2':
             word = input("Enter the word to search for: ").strip()
             output_file = input("Enter the name of the output file: ").strip()
             write_headlines_with_word(headlines, word, output_file)
             print(f"Headlines containing '{word}' have been written to '{output_file}'.\n")
-        elif choice == 3:
+        elif choice == '3':
             average_length = calculate_average_length(headlines)
             print(f"The average headline length is {average_length:.2f} characters.\n")
-        elif choice == 4:
+        elif choice == '4':
             longest = find_longest_headline(headlines)
-            print(f"The longest headline is: {longest}\n")
-        elif choice == 5:
-            shortest = find_shortest_headline(headlines)
-            print(f"The shortest headline is: {shortest}\n")
-        elif choice == 6:
+            print(f"The shortest headline is: {shortest}")
+        elif choice == '5':
+            shortest= find_shortest_headline(headlines)
+            print(f"The shortest headline is: {shortest}")
+        elif choice == '6':
             headlines = []
             print("Ready to load a new file.\n")
-            os.system('clear')
-        elif choice == 7:
+        elif choice == '7':
             print("Thank you for using the ABC Headline Analyzer. Goodbye!")
             choice = 'no'
+        else:
+            print("Invalid choice. Please try again.\n")
 
 main()
